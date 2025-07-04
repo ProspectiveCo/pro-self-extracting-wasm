@@ -1,0 +1,26 @@
+#  ┌───────────────────────────────────────────────────────────────────────────┐
+#  │                                                                           │
+#  │  ██████╗ ██████╗  ██████╗   Copyright (C) 2025, The Prospective Company   │
+#  │  ██╔══██╗██╔══██╗██╔═══██╗                                                │
+#  │  ██████╔╝██████╔╝██║   ██║  This file is part of the Procss library,      │
+#  │  ██╔═══╝ ██╔══██╗██║   ██║  distributed under the terms of the            │
+#  │  ██║     ██║  ██║╚██████╔╝  Apache License 2.0.  The full license can     │
+#  │  ╚═╝     ╚═╝  ╚═╝ ╚═════╝   be found in the LICENSE file.                 │
+#  │                                                                           │
+#  └───────────────────────────────────────────────────────────────────────────┘
+
+[workspace]
+resolver = "2"
+# default-members = ["pro-self-extracting-wasm"]
+members = ["runtime", "bundle"]
+
+[profile.dev]
+panic = "abort"
+opt-level = "s"
+
+[profile.release]
+panic = "abort"
+opt-level = "z"
+codegen-units = 1
+lto = true
+strip = true

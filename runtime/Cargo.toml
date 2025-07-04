@@ -1,0 +1,29 @@
+#  ┌───────────────────────────────────────────────────────────────────────────┐
+#  │                                                                           │
+#  │  ██████╗ ██████╗  ██████╗   Copyright (C) 2025, The Prospective Company   │
+#  │  ██╔══██╗██╔══██╗██╔═══██╗                                                │
+#  │  ██████╔╝██████╔╝██║   ██║  This file is part of the Procss library,      │
+#  │  ██╔═══╝ ██╔══██╗██║   ██║  distributed under the terms of the            │
+#  │  ██║     ██║  ██║╚██████╔╝  Apache License 2.0.  The full license can     │
+#  │  ╚═╝     ╚═╝  ╚═╝ ╚═════╝   be found in the LICENSE file.                 │
+#  │                                                                           │
+#  └───────────────────────────────────────────────────────────────────────────┘
+
+[package]
+name = "runtime"
+description = "A tool for creating self-extracting WebAssembly binaries"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+path = "lib.rs"
+test = false
+
+[dependencies]
+wee_alloc = "0.4.5"
+
+[dependencies.zune-inflate]
+version = "0.2"
+default-features = false
+features = ["zlib"]
