@@ -56,17 +56,7 @@ pub fn resize(size: usize) -> *const u8 {
 }
 
 #[unsafe(no_mangle)]
-pub fn size() -> usize {
-    unsafe { DECOMPRESSED_BYTES.len() }
-}
-
-#[unsafe(no_mangle)]
-pub fn offset() -> *const u8 {
-    unsafe { DECOMPRESSED_BYTES.as_ptr() }
-}
-
-#[unsafe(no_mangle)]
-pub fn compile(size: usize, out_size: usize) {
+pub fn compile(size: usize, out_size: usize) -> *const u8 {
     unsafe { COMPRESSED_BYTES.set_len(size) };
     let options = DeflateOptions::default()
         .set_size_hint(out_size)
@@ -77,4 +67,6 @@ pub fn compile(size: usize, out_size: usize) {
     unsafe {
         DECOMPRESSED_BYTES = v;
     }
+
+    unsafe { DECOMPRESSED_BYTES.as_ptr() }
 }

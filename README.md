@@ -12,13 +12,13 @@ npm install pro-self-extracting-wasm
 Compile your target
 
 ```bash
-npx pro_self_extracting_wasm ./my_assembly.wasm --output my_assembly.wasm.bundle
+npm exec pro_self_extracting_wasm ./my_assembly.wasm --output my_assembly.compressed.wasm
 ```
 
 Unzip the bundle in JavaScript
 
 ```javascript
 import {extract} from "pro-self-extracting-wasm";
-const my_assembly = extract(fetch("./my_assembly.wasm.bundle"));
+const my_assembly = await extract(fetch("./my_assembly.compressed.wasm"));
 ```
 

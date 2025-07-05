@@ -1,4 +1,5 @@
 /target
-pro-self-extracting-wasm/runtime.wasm
 runtime.wasm
 node_modules
+.vscode/settings.json
+test-results
