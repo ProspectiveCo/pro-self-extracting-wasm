@@ -9,18 +9,31 @@
 // │                                                                           │
 // └───────────────────────────────────────────────────────────────────────────┘
 
-export async function extract(path) {
-    const req = await fetch(path);
-    const view = new DataView(await req.arrayBuffer());
-    const len = view.getUint32(0, true);
-    const payload = view.buffer.slice(4, 4 + len);
-    const bin = await WebAssembly.instantiate(view.buffer.slice(4 + len));
+export async function extract(input) {
+    let bin;
+    if (typeof input?.then === "function") {
+        bin = await WebAssembly.instantiateStreaming(input);
+    } else if (typeof input === "string") {
+        bin = await WebAssembly.instantiateStreaming(fetch(input));
+    } else if (input instanceof Response) {
+        bin = await WebAssembly.instantiateStreaming(input);
+    } else if (input instanceof ArrayBuffer) {
+        bin = await WebAssembly.instantiate(input);
+    } else if (input instanceof Uint8Array) {
+        bin = await WebAssembly.instantiate(input.buffer);
+    }
+
     const mod = bin.instance.exports;
-    const ptr = mod.resize(payload.byteLength);
+    const payload = WebAssembly.Module.customSections(bin.module, "pp");
+    const raw_length_view = WebAssembly.Module.customSections(bin.module, "pr");
+    const view = new DataView(raw_length_view[0]);
+    const raw_length = view.getUint32(0, true);
+    const ptr = mod.resize(payload[0].byteLength);
     const view1 = new Uint8Array(mod.memory.buffer);
-    view1.set(new Uint8Array(payload), ptr);
-    mod.compile(payload.byteLength);
+    view1.set(new Uint8Array(payload[0]), ptr);
+    mod.compile(payload[0].byteLength, raw_length);
+    const view2 = new Uint8Array(mod.memory.buffer);
     const offset = mod.offset();
     const size = mod.size();
-    return view1.slice(offset, size + offset);
+    return view2.slice(offset, size + offset);
 }

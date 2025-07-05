@@ -1,9 +1,13 @@
 {
     "name": "pro_self_extracting_wasm",
-    "version": "0.0.1",
+    "version": "0.0.7",
     "description": "",
     "main": "compress.js",
     "author": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/prospectiveco/pro_self_extracting_wasm"
+    },
     "license": "Apache-2.0",
     "bin": {
         "pro_self_extracting_wasm": "main.js"
@@ -22,5 +26,8 @@
             },
             "default": "./extract.js"
         }
+    },
+    "dependencies": {
+        "leb128": "^0.0.5"
     }
 }

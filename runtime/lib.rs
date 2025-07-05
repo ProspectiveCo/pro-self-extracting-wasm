@@ -33,7 +33,7 @@ extern crate alloc;
 extern crate wee_alloc;
 
 use alloc::vec::Vec;
-use zune_inflate::DeflateDecoder;
+use zune_inflate::{DeflateDecoder, DeflateOptions};
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
@@ -66,9 +66,13 @@ pub fn offset() -> *const u8 {
 }
 
 #[unsafe(no_mangle)]
-pub fn compile(size: usize) {
+pub fn compile(size: usize, out_size: usize) {
     unsafe { COMPRESSED_BYTES.set_len(size) };
-    let mut decoder = unsafe { DeflateDecoder::new(&COMPRESSED_BYTES) };
+    let options = DeflateOptions::default()
+        .set_size_hint(out_size)
+        .set_confirm_checksum(false)
+        .set_limit(out_size);
+    let mut decoder = unsafe { DeflateDecoder::new_with_options(&COMPRESSED_BYTES, options) };
     let v = decoder.decode_zlib().unwrap();
     unsafe {
         DECOMPRESSED_BYTES = v;
